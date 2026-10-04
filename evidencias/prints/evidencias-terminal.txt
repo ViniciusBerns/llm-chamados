@@ -1,0 +1,269 @@
+(.venv) PS C:\projetos\llm-chamados> python src/avaliar.py --nome base_sem_treino
+tokenizer_config.json: 7.30kB [00:00, 6.28MB/s]
+C:\projetos\llm-chamados\.venv\Lib\site-packages\huggingface_hub\file_download.py:143: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Vinib\.cache\huggingface\hub\models--Qwen--Qwen2.5-1.5B-Instruct. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+vocab.json: 2.78MB [00:00, 157MB/s]
+merges.txt: 1.67MB [00:00, 195MB/s]
+tokenizer.json: 7.03MB [00:00, 211MB/s]
+config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 660/660 [00:00<?, ?B/s]
+`torch_dtype` is deprecated! Use `dtype` instead!
+Xet Storage is enabled for this repo, but the 'hf_xet' package is not installed. Falling back to regular HTTP download. For better performance, install the package with: `pip install huggingface_hub[hf_xet]` or `pip install hf_xet`
+model.safetensors: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 3.09G/3.09G [01:06<00:00, 46.5MB/s]
+generation_config.json: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 242/242 [00:00<?, ?B/s]
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "base_sem_treino",
+  "json_valido": 100.0,
+  "acerto_categoria": 63.0,
+  "acerto_prioridade": 59.0,
+  "acerto_total": 38.0,
+  "tempo_s": 7.5
+}
+(.venv) PS C:\projetos\llm-chamados> python src/treinar.py --run_name lr2e-4
+GPU: AMD Radeon RX 7600 | tipo numérico: torch.bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 18,464,768 || all params: 1,562,179,072 || trainable%: 1.1820
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+época 1 | passo 10/136 | loss 0.0087 | VRAM em uso 3.3 GB
+época 1 | passo 20/136 | loss 0.0008 | VRAM em uso 3.3 GB
+época 1 | passo 30/136 | loss 0.0001 | VRAM em uso 3.3 GB
+época 1 | passo 40/136 | loss 0.0001 | VRAM em uso 3.3 GB
+época 1 | passo 50/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 1 | passo 60/136 | loss 0.0001 | VRAM em uso 3.3 GB
+=== Época 1: loss treino 0.0187 | loss validação 0.0000
+época 2 | passo 70/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 80/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 90/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 100/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 110/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 120/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 130/136 | loss 0.0000 | VRAM em uso 3.3 GB
+=== Época 2: loss treino 0.0000 | loss validação 0.0000
+Modelo salvo em outputs\lr2e-4 | tempo 363.6 s | pico VRAM 7.48 GB
+(.venv) PS C:\projetos\llm-chamados> python src/avaliar.py --adapter outputs/lr2e-4 --nome lr2e-4
+`torch_dtype` is deprecated! Use `dtype` instead!
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "lr2e-4",
+  "json_valido": 100.0,
+  "acerto_categoria": 83.0,
+  "acerto_prioridade": 91.0,
+  "acerto_total": 74.0,
+  "tempo_s": 8.2
+}
+(.venv) PS C:\projetos\llm-chamados> python src/treinar.py --run_name lr5e-5 --lr 5e-5
+>> python src/avaliar.py --adapter outputs/lr5e-5 --nome lr5e-5
+GPU: AMD Radeon RX 7600 | tipo numérico: torch.bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 18,464,768 || all params: 1,562,179,072 || trainable%: 1.1820
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+época 1 | passo 10/136 | loss 0.0738 | VRAM em uso 3.3 GB
+época 1 | passo 20/136 | loss 0.0199 | VRAM em uso 3.3 GB
+época 1 | passo 30/136 | loss 0.0100 | VRAM em uso 3.3 GB
+época 1 | passo 40/136 | loss 0.0036 | VRAM em uso 3.3 GB
+época 1 | passo 50/136 | loss 0.0039 | VRAM em uso 3.3 GB
+época 1 | passo 60/136 | loss 0.0013 | VRAM em uso 3.3 GB
+=== Época 1: loss treino 0.0357 | loss validação 0.0008
+época 2 | passo 70/136 | loss 0.0009 | VRAM em uso 3.3 GB
+época 2 | passo 80/136 | loss 0.0003 | VRAM em uso 3.3 GB
+época 2 | passo 90/136 | loss 0.0005 | VRAM em uso 3.3 GB
+época 2 | passo 100/136 | loss 0.0005 | VRAM em uso 3.3 GB
+época 2 | passo 110/136 | loss 0.0004 | VRAM em uso 3.3 GB
+época 2 | passo 120/136 | loss 0.0004 | VRAM em uso 3.3 GB
+época 2 | passo 130/136 | loss 0.0004 | VRAM em uso 3.3 GB
+=== Época 2: loss treino 0.0005 | loss validação 0.0004
+Modelo salvo em outputs\lr5e-5 | tempo 558.0 s | pico VRAM 7.48 GB
+`torch_dtype` is deprecated! Use `dtype` instead!
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "lr5e-5",
+  "json_valido": 100.0,
+  "acerto_categoria": 79.0,
+  "acerto_prioridade": 91.0,
+  "acerto_total": 70.0,
+  "tempo_s": 8.5
+}
+(.venv) PS C:\projetos\llm-chamados> python src/treinar.py --run_name lr5e-4 --lr 5e-4
+>> python src/avaliar.py --adapter outputs/lr5e-4 --nome lr5e-4
+GPU: AMD Radeon RX 7600 | tipo numérico: torch.bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 18,464,768 || all params: 1,562,179,072 || trainable%: 1.1820
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+época 1 | passo 10/136 | loss 0.0359 | VRAM em uso 3.3 GB
+época 1 | passo 20/136 | loss 0.0027 | VRAM em uso 3.3 GB
+época 1 | passo 30/136 | loss 0.0005 | VRAM em uso 3.3 GB
+época 1 | passo 40/136 | loss 0.0006 | VRAM em uso 3.3 GB
+época 1 | passo 50/136 | loss 0.0003 | VRAM em uso 3.3 GB
+época 1 | passo 60/136 | loss 0.0001 | VRAM em uso 3.3 GB
+=== Época 1: loss treino 0.0213 | loss validação 0.0000
+época 2 | passo 70/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 80/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 90/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 100/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 110/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 120/136 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 130/136 | loss 0.0000 | VRAM em uso 3.3 GB
+=== Época 2: loss treino 0.0000 | loss validação 0.0000
+Modelo salvo em outputs\lr5e-4 | tempo 439.7 s | pico VRAM 7.48 GB
+`torch_dtype` is deprecated! Use `dtype` instead!
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "lr5e-4",
+  "json_valido": 100.0,
+  "acerto_categoria": 74.0,
+  "acerto_prioridade": 47.0,
+  "acerto_total": 31.0,
+  "tempo_s": 8.2
+}
+(.venv) PS C:\projetos\llm-chamados> python src/treinar.py --run_name rank4 --rank 4 --alpha 8
+>> python src/avaliar.py --adapter outputs/rank4 --nome rank4
+GPU: AMD Radeon RX 7600 | tipo numérico: torch.bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 4,616,192 || all params: 1,548,330,496 || trainable%: 0.2981
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+época 1 | passo 10/136 | loss 0.1603 | VRAM em uso 3.2 GB
+época 1 | passo 20/136 | loss 0.0194 | VRAM em uso 3.2 GB
+época 1 | passo 30/136 | loss 0.0065 | VRAM em uso 3.2 GB
+época 1 | passo 40/136 | loss 0.0012 | VRAM em uso 3.2 GB
+época 1 | passo 50/136 | loss 0.0003 | VRAM em uso 3.2 GB
+época 1 | passo 60/136 | loss 0.0004 | VRAM em uso 3.2 GB
+=== Época 1: loss treino 0.0318 | loss validação 0.0002
+época 2 | passo 70/136 | loss 0.0004 | VRAM em uso 3.2 GB
+época 2 | passo 80/136 | loss 0.0002 | VRAM em uso 3.2 GB
+época 2 | passo 90/136 | loss 0.0001 | VRAM em uso 3.2 GB
+época 2 | passo 100/136 | loss 0.0002 | VRAM em uso 3.2 GB
+época 2 | passo 110/136 | loss 0.0001 | VRAM em uso 3.2 GB
+época 2 | passo 120/136 | loss 0.0002 | VRAM em uso 3.2 GB
+época 2 | passo 130/136 | loss 0.0001 | VRAM em uso 3.2 GB
+=== Época 2: loss treino 0.0002 | loss validação 0.0001
+Modelo salvo em outputs\rank4 | tempo 459.9 s | pico VRAM 7.23 GB
+`torch_dtype` is deprecated! Use `dtype` instead!
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "rank4",
+  "json_valido": 100.0,
+  "acerto_categoria": 83.0,
+  "acerto_prioridade": 79.0,
+  "acerto_total": 67.0,
+  "tempo_s": 8.3
+}
+(.venv) PS C:\projetos\llm-chamados> python src/treinar.py --run_name rank64 --rank 64 --alpha 128
+>> python src/avaliar.py --adapter outputs/rank64 --nome rank64
+GPU: AMD Radeon RX 7600 | tipo numérico: torch.bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 73,859,072 || all params: 1,617,573,376 || trainable%: 4.5660
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+época 1 | passo 10/136 | loss 0.0256 | VRAM em uso 4.0 GB
+época 1 | passo 20/136 | loss 0.0006 | VRAM em uso 4.0 GB
+época 1 | passo 30/136 | loss 0.0001 | VRAM em uso 3.9 GB
+época 1 | passo 40/136 | loss 0.0001 | VRAM em uso 4.0 GB
+época 1 | passo 50/136 | loss 0.0001 | VRAM em uso 4.0 GB
+época 1 | passo 60/136 | loss 0.0000 | VRAM em uso 3.9 GB
+=== Época 1: loss treino 0.0204 | loss validação 0.0002
+época 2 | passo 70/136 | loss 0.0000 | VRAM em uso 4.0 GB
+época 2 | passo 80/136 | loss 0.0000 | VRAM em uso 4.0 GB
+época 2 | passo 90/136 | loss 0.0000 | VRAM em uso 3.9 GB
+época 2 | passo 100/136 | loss 0.0000 | VRAM em uso 3.9 GB
+época 2 | passo 110/136 | loss 0.0000 | VRAM em uso 4.0 GB
+época 2 | passo 120/136 | loss 0.0000 | VRAM em uso 4.0 GB
+época 2 | passo 130/136 | loss 0.0000 | VRAM em uso 4.0 GB
+=== Época 2: loss treino 0.0000 | loss validação 0.0000
+Modelo salvo em outputs\rank64 | tempo 711.6 s | pico VRAM 8.29 GB
+`torch_dtype` is deprecated! Use `dtype` instead!
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "rank64",
+  "json_valido": 100.0,
+  "acerto_categoria": 58.0,
+  "acerto_prioridade": 61.0,
+  "acerto_total": 34.0,
+  "tempo_s": 8.7
+}
+(.venv) PS C:\projetos\llm-chamados> python src/treinar.py --run_name epocas1 --epochs 1
+>> python src/avaliar.py --adapter outputs/epocas1 --nome epocas1
+GPU: AMD Radeon RX 7600 | tipo numérico: torch.bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 18,464,768 || all params: 1,562,179,072 || trainable%: 1.1820
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+época 1 | passo 10/68 | loss 0.0133 | VRAM em uso 3.3 GB
+época 1 | passo 20/68 | loss 0.0005 | VRAM em uso 3.3 GB
+época 1 | passo 30/68 | loss 0.0001 | VRAM em uso 3.3 GB
+época 1 | passo 40/68 | loss 0.0001 | VRAM em uso 3.3 GB
+época 1 | passo 50/68 | loss 0.0000 | VRAM em uso 3.3 GB
+época 1 | passo 60/68 | loss 0.0001 | VRAM em uso 3.3 GB
+=== Época 1: loss treino 0.0171 | loss validação 0.0001
+Modelo salvo em outputs\epocas1 | tempo 228.1 s | pico VRAM 7.41 GB
+`torch_dtype` is deprecated! Use `dtype` instead!
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "epocas1",
+  "json_valido": 100.0,
+  "acerto_categoria": 68.0,
+  "acerto_prioridade": 83.0,
+  "acerto_total": 53.0,
+  "tempo_s": 8.6
+}
+(.venv) PS C:\projetos\llm-chamados> python src/treinar.py --run_name epocas4 --epochs 4
+>> python src/avaliar.py --adapter outputs/epocas4 --nome epocas4
+GPU: AMD Radeon RX 7600 | tipo numérico: torch.bfloat16
+`torch_dtype` is deprecated! Use `dtype` instead!
+trainable params: 18,464,768 || all params: 1,562,179,072 || trainable%: 1.1820
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+época 1 | passo 10/272 | loss 0.0815 | VRAM em uso 3.3 GB
+época 1 | passo 20/272 | loss 0.0015 | VRAM em uso 3.3 GB
+época 1 | passo 30/272 | loss 0.0001 | VRAM em uso 3.3 GB
+época 1 | passo 40/272 | loss 0.0002 | VRAM em uso 3.3 GB
+época 1 | passo 50/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 1 | passo 60/272 | loss 0.0000 | VRAM em uso 3.3 GB
+=== Época 1: loss treino 0.0261 | loss validação 0.0000
+época 2 | passo 70/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 80/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 90/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 100/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 110/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 120/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 2 | passo 130/272 | loss 0.0000 | VRAM em uso 3.3 GB
+=== Época 2: loss treino 0.0000 | loss validação 0.0000
+época 3 | passo 140/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 3 | passo 150/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 3 | passo 160/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 3 | passo 170/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 3 | passo 180/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 3 | passo 190/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 3 | passo 200/272 | loss 0.0000 | VRAM em uso 3.3 GB
+=== Época 3: loss treino 0.0000 | loss validação 0.0000
+época 4 | passo 210/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 4 | passo 220/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 4 | passo 230/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 4 | passo 240/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 4 | passo 250/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 4 | passo 260/272 | loss 0.0000 | VRAM em uso 3.3 GB
+época 4 | passo 270/272 | loss 0.0000 | VRAM em uso 3.3 GB
+=== Época 4: loss treino 0.0000 | loss validação 0.0000
+Modelo salvo em outputs\epocas4 | tempo 991.0 s | pico VRAM 7.48 GB
+`torch_dtype` is deprecated! Use `dtype` instead!
+C:\projetos\llm-chamados\.venv\Lib\site-packages\transformers\integrations\sdpa_attention.py:96: UserWarning: Mem Efficient attention on Current AMD GPU is still experimental. Enable it with TORCH_ROCM_AOTRITON_ENABLE_EXPERIMENTAL=1. (Triggered internally at B:\src\pytorch\aten\src\ATen\native\transformers\hip\sdp_utils.cpp:432.)
+  attn_output = torch.nn.functional.scaled_dot_product_attention(
+{
+  "nome": "epocas4",
+  "json_valido": 100.0,
+  "acerto_categoria": 74.0,
+  "acerto_prioridade": 79.0,
+  "acerto_total": 55.0,
+  "tempo_s": 8.2
+}
