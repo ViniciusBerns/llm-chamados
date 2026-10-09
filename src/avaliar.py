@@ -11,13 +11,15 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from common import (carregar_jsonl, escolher_dispositivo, escolher_dtype,
                     extrair_json, montar_prompt)
 
+# Configuração dos parâmetros para avaliação do modelo
 p = argparse.ArgumentParser()
 p.add_argument("--model", default="Qwen/Qwen2.5-1.5B-Instruct")
-p.add_argument("--adapter", default=None)  # pasta do modelo treinado; vazio = modelo sem treino
+p.add_argument("--adapter", default=None)
 p.add_argument("--nome", default="base_sem_treino")
 p.add_argument("--batch", type=int, default=16)
 args = p.parse_args()
 
+# Carregamento do modelo base e aplicação opcional do adaptador LoRA
 device = escolher_dispositivo()
 tok = AutoTokenizer.from_pretrained(args.model)
 tok.padding_side = "left"
@@ -26,11 +28,13 @@ if args.adapter:
     model = PeftModel.from_pretrained(model, args.adapter).merge_and_unload()
 model.eval()
 
+# Carregamento dos dados de teste e inicialização das métricas
 dados = carregar_jsonl("data/test.jsonl")
 ok_json = ok_cat = ok_prio = ok_ambos = 0
 predicoes = []
 t0 = time.time()
 
+# Avaliação dos chamados em lotes para otimizar o processamento
 for i in range(0, len(dados), args.batch):
     lote = dados[i : i + args.batch]
     prompts = [montar_prompt(tok, ex["texto"]) for ex in lote]
@@ -51,6 +55,7 @@ for i in range(0, len(dados), args.batch):
         ok_ambos += int(cat and prio)
         predicoes.append({"texto": ex["texto"], "esperado": [ex["categoria"], ex["prioridade"]], "resposta": txt})
 
+# Cálculo das métricas de desempenho e do tempo total de execução
 n = len(dados)
 res = {
     "nome": args.nome,
@@ -62,11 +67,13 @@ res = {
 }
 print(json.dumps(res, indent=2, ensure_ascii=False))
 
+# Armazenamento das predições individuais para análise posterior
 Path("resultados").mkdir(exist_ok=True)
 with open(f"resultados/{args.nome}_predicoes.jsonl", "w", encoding="utf-8") as f:
     for r in predicoes:
         f.write(json.dumps(r, ensure_ascii=False) + "\n")
 
+# Registro consolidado das métricas para comparação entre experimentos
 resumo = Path("resultados/resumo.csv")
 nova = not resumo.exists()
 with open(resumo, "a", newline="", encoding="utf-8") as f:

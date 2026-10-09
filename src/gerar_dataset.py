@@ -2,6 +2,7 @@ import json
 import random
 from pathlib import Path
 
+# Define uma semente fixa para garantir a reprodutibilidade dos dados
 random.seed(42)
 
 # 7 frases por categoria: as 5 primeiras vão para treino, as 2 últimas só para teste
@@ -78,10 +79,12 @@ URGENCIAS = {
     ],
 }
 
+# Dados auxiliares para variar o contexto dos chamados gerados
 NOMES = ["Ana", "Bruno", "Carla", "Diego", "Elisa", "Fábio", "Gabriela", "Henrique", "Isabela", "João"]
 SETORES = ["financeiro", "comercial", "RH", "logística", "jurídico", "marketing", "atendimento", "diretoria"]
 
 
+# Gera chamados sintéticos combinando problemas, prioridades e contextos aleatórios
 def gerar(problemas, urgencias, n):
     linhas = []
     for _ in range(n):
@@ -95,12 +98,14 @@ def gerar(problemas, urgencias, n):
     return linhas
 
 
+# Salva os exemplos gerados no formato JSONL
 def salvar(linhas, caminho):
     with open(caminho, "w", encoding="utf-8") as f:
         for l in linhas:
             f.write(json.dumps(l, ensure_ascii=False) + "\n")
 
 
+# Cria conjuntos separados de treino e teste para avaliar a generalização do modelo
 Path("data").mkdir(exist_ok=True)
 treino = gerar({c: v[:5] for c, v in PROBLEMAS.items()}, {p: v[:3] for p, v in URGENCIAS.items()}, 600)
 teste = gerar({c: v[5:] for c, v in PROBLEMAS.items()}, {p: v[3:] for p, v in URGENCIAS.items()}, 100)
