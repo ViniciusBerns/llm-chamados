@@ -70,7 +70,7 @@ O script verificar_gpu.py consulta torch.cuda.is_available(), imprime o nome da 
 
 A função escolher_dispositivo(), compartilhada pelos scripts, encerra a execução quando não detecta GPU. Não há fallback automático para CPU no treinamento, na avaliação ou no frontend. A preparação dos textos e a leitura dos arquivos continuam sendo tarefas do host, enquanto o modelo e seus tensores de entrada são enviados para a GPU.
 
-![Figura 1 Verificação de PyTorch ROCm e cálculo na GPU](<evidencias/prints/imagem (2).png>)
+![Figura 1 Verificação de PyTorch ROCm e cálculo na GPU](<evidencias/prints/verificar-gpu.png>)
 
 ## 5 - Organização do código
 
@@ -148,7 +148,7 @@ O treinamento carrega o modelo em bfloat16 no ambiente observado, aplica LoRA e 
 | Warmup | 5% dos passos inteiros | Crescimento inicial da taxa |
 | Scheduler | Linear | Redução da taxa ao longo do treino |
 | Clipping | 1,0 | Limite da norma dos gradientes |
-| Sementes | 42 | random e torch |
+| Seeds | 42 | random e torch |
 | LoRA dropout | 0,05 | Regularização dos adaptadores |
 
 Com 540 registros e batch 4, cada época contém 135 microbatches. A acumulação gera 68 atualizações por época, incluindo uma última atualização com apenas um microbatch. Logo, o batch efetivo é nominalmente 8, mas a última atualização usa 4 exemplos. As execuções com uma, duas e quatro épocas realizam 68, 136 e 272 atualizações, respectivamente.
@@ -221,7 +221,7 @@ Na configuração lr2e-4, a primeira época registra loss média de treino 0,018
 
 Uma loss pequena mede boa previsão dos tokens-alvo nesse conjunto. Ela não comprova 100% de acerto de classificação por geração livre no treino ou na validação. Essa taxa não foi calculada pelo script de treinamento.
 
-A baixa loss combinada com 74% de acerto no teste é compatível com aprendizagem muito específica das frases do gerador. Entretanto, não demonstra sozinha a causa dos erros nem prova overfitting em cada configuração. O repertório restrito, a validação por registros do mesmo gerador e a ausência de múltiplas sementes limitam a interpretação.
+A baixa loss combinada com 74% de acerto no teste é compatível com aprendizagem muito específica das frases do gerador. Entretanto, não demonstra sozinha a causa dos erros nem prova overfitting em cada configuração. O repertório restrito, a validação por registros do mesmo gerador e a ausência de múltiplas seeds limitam a interpretação.
 
 O mesmo conjunto de teste foi consultado para comparar e escolher configurações. Assim, os 74% representam o melhor desempenho observado nesse conjunto de seleção. Uma avaliação final mais rigorosa exigiria outro conjunto independente, ainda não utilizado para orientar a escolha dos parâmetros.
 
@@ -261,16 +261,18 @@ O campo avançado permite editar a instrução do sistema. Isso possibilita expe
 
 | Entrada apresentada no frontend | Categoria retornada | Prioridade retornada | Arquivo |
 | --- | --- | --- | --- |
-| Impressora está quebrada | Hardware | Média | imagem (1).png |
-| Perdi acesso ao teams e tenho uma reunião urgente | Software | Alta | imagem (5).png e imagem (7).png |
-| Preciso de mais um cabo USB | Hardware | Baixa | imagem (8).png |
-| Cabo de rede quebrou | Rede | Média | imagem (9).png |
+| Impressora está quebrada | Hardware | Média | front-hardware-media.png |
+| Perdi acesso ao teams e tenho uma reunião urgente | Software | Alta | front-software-alta.png|
+| Preciso de mais um cabo USB | Hardware | Baixa | front-hardware-baixa.png|
+| Cabo de rede quebrou | Rede | Média | front-rede-media.png |
 
 Os testes manuais comprovam interação com a aplicação e produção de respostas estruturadas. Eles não possuem rótulos formais no dataset de teste. O exemplo de acesso ao Teams admite interpretação como autenticação ou falha de aplicativo e ilustra a necessidade de uma taxonomia mais clara. Nos exemplos sem urgência explícita, a prioridade é inferida sem dados suficientes sobre impacto ou prazo.
 
 A função responder() rejeita texto vazio com uma mensagem de erro. Não há histórico persistente de chamados, autenticação ou validação rígida dos valores de categoria e prioridade no frontend. A configuração de lançamento restringe o servidor ao endereço local.
 
-![Figura 2 Frontend com chamado urgente e resposta estruturada](<evidencias/prints/imagem (5).png>)
+![Figura 2 Frontend com chamado urgente e resposta estruturada](<evidencias/prints/front-software-alta.png>)
+
+![Figura 3 Frontend com chamado urgente e resposta estruturada](<evidencias/prints/front-erro.png>)
 
 ## 15 - Reprodução do experimento
 
@@ -317,20 +319,20 @@ O principal ganho observado foi a melhora sobre o modelo original, de 38% para 7
 ## Evidências
 
 Atividade da GPU.  
-![Figura 3 GPU em atividade e verificação no terminal do VS Code](<evidencias/prints/imagem (4).png>)
+![Figura 4 GPU em atividade e verificação no terminal do VS Code](<evidencias/prints/print-gpu.png>)
 
 Resultado sem treino. 
 
-![Figura 4 Avaliação do modelo original com 38 por cento de acerto conjunto](<evidencias/prints/imagem.png>) 
+![Figura 5 Avaliação do modelo original com 38 por cento de acerto conjunto](<evidencias/prints/base-sem-treino.png>) 
 
 Resultado do treino com melhor resultado.  
 
-![Figura 5 Avaliação de lr2e 4 com 74 por cento de acerto conjunto](<evidencias/prints/imagem (3).png>)
+![Figura 6 Avaliação de lr2e 4 com 74 por cento de acerto conjunto](<evidencias/prints/melhor-execucao.png>)
 
 Exemplos de classificações de chamados. 
 
-![Figura 6 Chamado sobre impressora e classificação Hardware Média](<evidencias/prints/imagem (1).png>)
+![Figura 7 Chamado sobre impressora e classificação Hardware Média](<evidencias/prints/front-hardware-media.png>)
 
-![Figura 7 Pedido de cabo USB e classificação Hardware Baixa](<evidencias/prints/imagem (8).png>)
+![Figura 8 Pedido de cabo USB e classificação Hardware Baixa](<evidencias/prints/front-hardware-baixa.png>)
 
-![Figura 8 Cabo de rede quebrado e classificação Rede Média](<evidencias/prints/imagem (9).png>)
+![Figura 9 Cabo de rede quebrado e classificação Rede Média](<evidencias/prints/front-rede-media.png>)
