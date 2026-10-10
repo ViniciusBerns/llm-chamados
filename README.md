@@ -336,3 +336,13 @@ Exemplos de classificações de chamados.
 ![Figura 8 Pedido de cabo USB e classificação Hardware Baixa](<evidencias/prints/front-hardware-baixa.png>)
 
 ![Figura 9 Cabo de rede quebrado e classificação Rede Média](<evidencias/prints/front-rede-media.png>)
+
+## Membros do Grupo
+
+| Nome | RM |
+|---|---|
+| 🍙 Fernanda Kaory Saito | RM551104 |
+| ⚡ João Pedro Borsato Cruz | RM550294 |
+| 💫 Maria Fernanda Vieira de Camargo | RM97956 |
+| 🚀 Pedro Lucas de Andrade Nunes | RM550366 |
+| 💥 Vinícius Bernardino de Souza | RM97888 |
